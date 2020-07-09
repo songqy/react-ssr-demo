@@ -12,6 +12,6 @@ export const createServerStore = () => {
 
 export const createClientStore = (preloadedState) => {
     //生成store对象
-    const store = createStore(finalReducer, preloadedState); 
+    const store = createStore(finalReducer, preloadedState);
     return store;
-}
+};

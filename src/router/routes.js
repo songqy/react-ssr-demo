@@ -1,5 +1,5 @@
 
-import Home from '../routes/Home'
+import Home from '../routes/Home';
 
 export const serverRoutes = [
     {
@@ -14,4 +14,4 @@ export const serverRoutes = [
         component: Home,
         exact: true,
     },
-]
+];
