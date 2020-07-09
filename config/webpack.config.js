@@ -1,7 +1,7 @@
 
 const os = require('os');
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const HappyPack = require('happypack');
@@ -10,10 +10,6 @@ const HappyPack = require('happypack');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 // const autoprefixer = require('autoprefixer');
 
-const publicPath = path.resolve(__dirname, 'public');
-const srcPath = path.resolve(__dirname, 'src');
-// const libPath = path.resolve(__dirname, 'lib');
-// const distPath = path.resolve(__dirname, 'dist');
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -22,10 +18,12 @@ const nodeExternals = require('webpack-node-externals');
 
 
 const rootPath = path.resolve(__dirname, '../');
+const srcPath = path.resolve(rootPath, 'src');
 
 module.exports = {
     mode: 'development',
-    devtool: 'cheap-module-eval-source-map',
+    // devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-module-source-map',
     entry: [path.resolve(rootPath, 'server/app.js')],
     output: {
         path: path.resolve(rootPath, 'build'),

@@ -3,9 +3,10 @@ import Koa from 'koa';
 import React from 'react';
 import Router from 'koa-router';
 import fs from 'fs';
+import util from 'util';
 import koaStatic from 'koa-static';
 import path from 'path';
-import { renderToString, renderToNodeStream } from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createServerStore } from '../src/redux/store';
@@ -29,48 +30,42 @@ app.use(
 );
 
 
+const readFile = util.promisify(fs.readFile);
+
+const router = new Router();
+router.get('(.*)', async (ctx) => {
+    // TODO 可以增加日志中间件
+    console.log('request url', ctx.url);
+
+    // 获取html模板
+    const shtml = await readFile(path.join(__dirname, '../build/index.html'), 'utf8');
+
+    // 生成redux的store
+    const store = createServerStore();
+    const { dispatch } = store;
+    dispatch(setMessage('message')); // test
+
+    // 可以改成renderToNodeStream，使用流，提高性能
+    const html = renderToString(
+        <Provider store={store}>
+            <StaticRouter
+                context={{}}
+                location={ctx.url}
+            >
+                <App/>
+            </StaticRouter>
+        </Provider>
+    );
+
+    ctx.type = 'html'; //指定content type
+
+    // 替换掉 {{root}} 为我们生成后的HTML
+    ctx.body = shtml.replace('{{root}}', html).replace('{{preloadedState}}', JSON.stringify(store.getState()).replace(/</g, '\\u003c'));
+});
 
 // 设置路由
-app.use(
-    new Router()
-        .get('(.*)', async (ctx, next) => {
-            ctx.response.type = 'html'; //指定content type
-            let shtml = '';
-            await new Promise((resolve, reject) => {
-                fs.readFile(path.join(__dirname, '../build/index.html'), 'utf8', function(err, data) {
-                    if (err) {
-                        reject();
-                        return console.log(err);
-                    }
-                    shtml = data;
-                    resolve();
-                });
-            });
-            const store = createServerStore();
-            const { dispatch } = store;
-            dispatch(setMessage('message'));
+app.use(router.routes());
 
-            console.log('url', ctx.url);
-
-            const MainApp = () => {
-                return (
-                    <Provider store={store}>
-                        <StaticRouter
-                            context={{}}
-                            location={ctx.url}
-                        >
-                            <App/>
-                        </StaticRouter>
-                    </Provider>
-                );
-            };
-
-            // 替换掉 {{root}} 为我们生成后的HTML
-            ctx.response.body = shtml.replace('{{root}}', renderToString(<MainApp />)).replace('{{preloadedState}}', JSON.stringify(store.getState()).replace(/</g, '\\u003c'));
-        })
-        .routes()
-);
-
-app.listen(config.port, function() {
+app.listen(config.port, () => {
     console.log('服务器启动，监听 port： ' + config.port + '  running~');
 });

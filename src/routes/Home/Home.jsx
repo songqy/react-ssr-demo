@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
-import logo from '../../images/logo.svg';
+import logo from '@/images/logo.svg';
 import './Home.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as appActions from '../../redux/app/actions';
+import * as appActions from '@/redux/app/actions';
 
 function Home(props) {
     const { message, action: { setMessage } } = props;
@@ -21,7 +21,7 @@ function Home(props) {
                     src={logo}
                 />
                 <p>
-          Edit <code>src/App.js</code> and save to reload.
+                    Edit <code>src/App.js</code> and save to reload.
                 </p>
                 <div>{message}</div>
                 <a
@@ -30,7 +30,7 @@ function Home(props) {
                     rel="noopener noreferrer"
                     target="_blank"
                 >
-          Learn React
+                    Learn React
                 </a>
                 <div onClick={handleClick}>click me</div>
             </header>
