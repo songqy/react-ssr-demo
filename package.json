@@ -1,0 +1,56 @@
+{
+  "name": "react-ssr-demo",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "koa": "^2.13.0",
+    "koa-router": "^9.1.0",
+    "koa-static": "^5.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.12.21",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "build:server": "npx webpack --config ./config/webpack.config.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "babel-plugin-import": "^1.13.0",
+    "babel-polyfill": "^6.26.0",
+    "happypack": "^5.0.1",
+    "ignore-loader": "^0.1.2",
+    "react-app-rewired": "^2.1.6",
+    "react-scripts": "3.4.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-node-externals": "^2.3.0"
+  }
+}
