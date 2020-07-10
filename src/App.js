@@ -2,9 +2,9 @@ import React from 'react';
 import MainRouter from './MainRouter';
 import './App.css';
 
-function App(props) {
+function App() {
     return (
-        <MainRouter {...props}/>
+        <MainRouter/>
     );
 }
 

@@ -8,7 +8,7 @@ const getRouterList = (routes) => {
     return routes.map(item =>
         <Route
             component={item.component}
-            exact={item.exact === true}
+            exact={item.exact !== false}
             key={item.key}
             path={item.path}
         />

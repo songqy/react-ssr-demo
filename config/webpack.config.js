@@ -85,7 +85,6 @@ module.exports = {
         modules: [srcPath, 'node_modules'],
         alias: {
             '@': path.resolve(rootPath, 'src'),
-            // global: path.resolve(publicPath, 'sass/_global.scss')
         },
     },
     // performance: {
