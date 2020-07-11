@@ -1,28 +1,43 @@
-
+const { override, fixBabelImports, addLessLoader, addWebpackAlias, useBabelRc } = require('customize-cra');
 const path = require('path');
 
 function resolve(dir) {
-  return path.join(__dirname, '.', dir);
+    return path.join(__dirname, '.', dir);
 }
 
-module.exports = {
-    webpack: function(config, env) {
-      // ...add your webpack config
-      // console.log(JSON.stringify(config));
-      // 去掉hash值，解决asset-require-hook资源问题
-      config.module.rules.forEach(d => {
+// 去掉hash值，解决asset-require-hook资源问题
+const cleanHash = () => config => {
+    config.module.rules.forEach(d => {
         d.oneOf &&
-          d.oneOf.forEach(e => {
-            if (e && e.options && e.options.name) {
+      d.oneOf.forEach(e => {
+          if (e && e.options && e.options.name) {
               e.options.name = e.options.name.replace('[hash:8].', '');
-            }
-          });
+          }
       });
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@': resolve('src')
-      }
-      return config;
-    }
-  };
-  
+    });
+    return config;
+};
+
+module.exports = override(
+    cleanHash(),
+
+    // 添加 less 依赖
+    addLessLoader({
+        javascriptEnabled: true,
+        localIdentName: '[path]-[local]',
+    }),
+
+    fixBabelImports('antd', {
+        libraryName: 'antd',
+        libraryDirectory: 'es',
+        style: true,
+        camel2DashComponentName: false,
+    }),
+
+    useBabelRc(),
+
+    // 为文件夹取别名
+    addWebpackAlias({
+        '@': resolve('src'),
+    }),
+);

@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import logo from '@/images/logo.svg';
+// import logo from '@/images/logo.svg';
 import './Home.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as appActions from '@/redux/app/actions';
 
-function Home(props) {
+const Home = (props) => {
     const { message, action: { setMessage } } = props;
 
     const handleClick = useCallback(() => {
@@ -16,27 +17,28 @@ function Home(props) {
     return (
         <div className="App">
             <header className="App-header">
-                <img alt="logo"
+                {/* <img alt="logo"
                     className="App-logo"
                     src={logo}
-                />
+                /> */}
                 <p>
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
                 <div>{message}</div>
-                <a
+                {/* <a
                     className="App-link"
                     href="https://reactjs.org"
                     rel="noopener noreferrer"
                     target="_blank"
                 >
                     Learn React
-                </a>
+                </a> */}
                 <div onClick={handleClick}>click me</div>
+                <Link to="/pageA">go to pageA</Link>
             </header>
         </div>
     );
-}
+};
 
 const mapStateToProps = ({ app }) => {
     return {

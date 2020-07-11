@@ -26,7 +26,7 @@ module.exports = {
     devtool: 'cheap-module-source-map',
     entry: [path.resolve(rootPath, 'server/app.js')],
     output: {
-        path: path.resolve(rootPath, 'build'),
+        path: path.resolve(rootPath, 'serverbuild'),
         filename: 'server.js',
         libraryTarget: 'commonjs2',
         publicPath: '/',
@@ -46,9 +46,30 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 exclude: /(node_modules)/,
                 use: ['happypack/loader?id=jsx'],
+                // use: {
+                //     loader: 'babel-loader',
+                //     options: {
+                //         cacheDirectory: true,
+                //         presets: ['@babel/preset-env', '@babel/preset-react'],
+                //         plugins: [
+                //             ['@babel/plugin-proposal-decorators', { 'legacy': true }],
+                //             // ['import', {
+                //             //     libraryName: 'antd',
+                //             //     libraryDirectory: 'es',
+                //             //     style: true,
+                //             //     // camel2DashComponentName: false,
+                //             // }],
+                //             '@babel/plugin-transform-runtime',
+                //             'react-hot-loader/babel',
+                //             'add-module-exports',
+                //             '@babel/plugin-proposal-class-properties',
+                //             '@babel/plugin-proposal-object-rest-spread',
+                //         ],
+                //     },
+                // },
             },
             {
-                test: /\.(css|scss)$/,
+                test: /\.(css|scss|less)$/,
                 use: ['ignore-loader'],
             },
             {
@@ -81,7 +102,7 @@ module.exports = {
     //     }
     // },
     resolve: {
-        extensions: ['.js', '.jsx', '.css', '.scss'],
+        extensions: ['.js', '.jsx', '.css', '.scss', '.less'],
         modules: [srcPath, 'node_modules'],
         alias: {
             '@': path.resolve(rootPath, 'src'),
@@ -106,6 +127,12 @@ module.exports = {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
                         plugins: [
                             ['@babel/plugin-proposal-decorators', { 'legacy': true }],
+                            // ['import', {
+                            //     libraryName: 'antd',
+                            //     // libraryDirectory: 'lib',
+                            //     style: true,
+                            //     // camel2DashComponentName: false,
+                            // }],
                             '@babel/plugin-transform-runtime',
                             'react-hot-loader/babel',
                             'add-module-exports',

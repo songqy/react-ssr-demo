@@ -14,13 +14,12 @@ delete window.__PRELOADED_STATE__;
 
 const store = createClientStore(preloadedState);
 
-ReactDOM.hydrate(
+const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
+renderMethod(
     <Provider store={store}>
-        <React.StrictMode>
-            <BrowserRouter>
-                <App/>
-            </BrowserRouter>
-        </React.StrictMode>
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
     </Provider>,
     document.getElementById('root')
 );
