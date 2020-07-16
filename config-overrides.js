@@ -21,12 +21,6 @@ const cleanHash = () => config => {
 module.exports = override(
     cleanHash(),
 
-    // 添加 less 依赖
-    addLessLoader({
-        javascriptEnabled: true,
-        localIdentName: '[path]-[local]',
-    }),
-
     fixBabelImports('antd', {
         libraryName: 'antd',
         libraryDirectory: 'es',
@@ -35,6 +29,13 @@ module.exports = override(
     }),
 
     useBabelRc(),
+
+    // 添加 less 依赖
+    addLessLoader({
+        lessOptions: {
+            javascriptEnabled: true,
+        },
+    }),
 
     // 为文件夹取别名
     addWebpackAlias({

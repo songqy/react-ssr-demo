@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 // import logo from '@/images/logo.svg';
-import './Home.css';
+import styles from './Home.module.less';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -15,8 +15,8 @@ const Home = (props) => {
 
 
     return (
-        <div className="App">
-            <header className="App-header">
+        <div className={styles['App']}>
+            <header className={styles['App-header']}>
                 {/* <img alt="logo"
                     className="App-logo"
                     src={logo}
