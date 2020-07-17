@@ -12,7 +12,7 @@ const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const nodeExternals = require('webpack-node-externals');
 // const CleanWebpackPlugin = require('clean-webpack-plugin')
 
@@ -49,7 +49,7 @@ module.exports = {
                 // use: {
                 //     loader: 'babel-loader',
                 //     options: {
-                //         cacheDirectory: true,
+                //         // cacheDirectory: true,
                 //         presets: ['@babel/preset-env', '@babel/preset-react'],
                 //         plugins: [
                 //             ['@babel/plugin-proposal-decorators', { 'legacy': true }],
@@ -68,9 +68,37 @@ module.exports = {
                 //     },
                 // },
             },
+            // {
+            //     test: /\.(css|scss|less)$/,
+            //     use: ['ignore-loader'],
+            // },
             {
                 test: /\.(css|scss|less)$/,
-                use: ['ignore-loader'],
+                // use: ['ignore-loader'],
+                exclude: /(node_modules)/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    // 'isomorphic-style-loader',
+                    {
+                        loader: 'css-loader',
+                        // options: {
+                        //     modules: {
+                        //         mode: 'global',
+                        //         localIdentName: '[local]--[hash:base64:5]',
+                        //     },
+                        // },
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            lessOptions: {
+                                javascriptEnabled: true,
+                            },
+                        },
+                    },
+                ],
             },
             {
                 test: /\.(png|jpg|jpeg|gif|mp4|ogg|svg|woff|woff2|ttf|eot)$/,
@@ -116,6 +144,7 @@ module.exports = {
         // new webpack.ProvidePlugin({
         //     'window.Quill': 'quill'
         // }),
+        new MiniCssExtractPlugin(),
         new HappyPack({
             id: 'jsx',
             threadPool: happyThreadPool,
@@ -123,7 +152,7 @@ module.exports = {
                 {
                     loader: 'babel-loader',
                     options: {
-                        cacheDirectory: true,
+                        // cacheDirectory: true,
                         presets: ['@babel/preset-env', '@babel/preset-react'],
                         plugins: [
                             ['@babel/plugin-proposal-decorators', { 'legacy': true }],

@@ -1,13 +1,17 @@
 import React, { useCallback } from 'react';
 // import logo from '@/images/logo.svg';
+// import s from './Home.module.less';
 import styles from './Home.module.less';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+// import useStyles from 'isomorphic-style-loader/useStyles';
 import * as appActions from '@/redux/app/actions';
 
 const Home = (props) => {
     const { message, action: { setMessage } } = props;
+
+    // useStyles(styles);
 
     const handleClick = useCallback(() => {
         setMessage('click');
@@ -50,4 +54,5 @@ const mapDispatchToProps = (dispatch) => {
         action: bindActionCreators(appActions, dispatch),
     };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
