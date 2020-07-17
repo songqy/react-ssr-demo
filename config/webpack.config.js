@@ -68,27 +68,23 @@ module.exports = {
                 //     },
                 // },
             },
-            // {
-            //     test: /\.(css|scss|less)$/,
-            //     use: ['ignore-loader'],
-            // },
             {
                 test: /\.(css|scss|less)$/,
                 // use: ['ignore-loader'],
                 exclude: /(node_modules)/,
                 use: [
                     {
+                        // server 必须加这个，否则css module有问题
                         loader: MiniCssExtractPlugin.loader,
                     },
-                    // 'isomorphic-style-loader',
                     {
                         loader: 'css-loader',
-                        // options: {
-                        //     modules: {
-                        //         mode: 'global',
-                        //         localIdentName: '[local]--[hash:base64:5]',
-                        //     },
-                        // },
+                        options: {
+                            modules: {
+                                mode: 'local',
+                                localIdentName: '[local]--[hash:base64:5]',
+                            },
+                        },
                     },
                     {
                         loader: 'less-loader',
@@ -134,6 +130,7 @@ module.exports = {
         modules: [srcPath, 'node_modules'],
         alias: {
             '@': path.resolve(rootPath, 'src'),
+            'src': path.resolve(rootPath, 'src'), // less 需要这个
         },
     },
     // performance: {
@@ -156,12 +153,6 @@ module.exports = {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
                         plugins: [
                             ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-                            // ['import', {
-                            //     libraryName: 'antd',
-                            //     // libraryDirectory: 'lib',
-                            //     style: true,
-                            //     // camel2DashComponentName: false,
-                            // }],
                             '@babel/plugin-transform-runtime',
                             'react-hot-loader/babel',
                             'add-module-exports',
