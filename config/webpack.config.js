@@ -46,31 +46,9 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 exclude: /(node_modules)/,
                 use: ['happypack/loader?id=jsx'],
-                // use: {
-                //     loader: 'babel-loader',
-                //     options: {
-                //         // cacheDirectory: true,
-                //         presets: ['@babel/preset-env', '@babel/preset-react'],
-                //         plugins: [
-                //             ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-                //             // ['import', {
-                //             //     libraryName: 'antd',
-                //             //     libraryDirectory: 'es',
-                //             //     style: true,
-                //             //     // camel2DashComponentName: false,
-                //             // }],
-                //             '@babel/plugin-transform-runtime',
-                //             'react-hot-loader/babel',
-                //             'add-module-exports',
-                //             '@babel/plugin-proposal-class-properties',
-                //             '@babel/plugin-proposal-object-rest-spread',
-                //         ],
-                //     },
-                // },
             },
             {
                 test: /\.(css|scss|less)$/,
-                // use: ['ignore-loader'],
                 exclude: /(node_modules)/,
                 use: [
                     {
@@ -133,14 +111,7 @@ module.exports = {
             'src': path.resolve(rootPath, 'src'), // less 需要这个
         },
     },
-    // performance: {
-    //     hints: false
-    // },
     plugins: [
-        // new HardSourceWebpackPlugin(),
-        // new webpack.ProvidePlugin({
-        //     'window.Quill': 'quill'
-        // }),
         new MiniCssExtractPlugin(),
         new HappyPack({
             id: 'jsx',
