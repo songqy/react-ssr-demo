@@ -1,4 +1,4 @@
-import App from '../src/App';
+import App from '@/App';
 import Koa from 'koa';
 import React from 'react';
 import Router from 'koa-router';
@@ -7,10 +7,11 @@ import util from 'util';
 import koaStatic from 'koa-static';
 import path from 'path';
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom';
+import { StaticRouter, matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { createServerStore } from '../src/redux/store';
-import { setMessage } from '../src/redux/app/actions';
+import { createServerStore } from '@/redux/store';
+import { setMessage } from '@/redux/app/actions';
+import { serverRoutes } from '@/router/routes';
 
 // 配置文件
 const config = {
@@ -45,11 +46,23 @@ router.get('(.*)', async (ctx) => {
     const { dispatch } = store;
     dispatch(setMessage('message')); // test
 
+    // 初始化异步数据
+    const promises = [];
+    serverRoutes.some(route => {
+        const match = matchPath(ctx.url, route);
+        if (match && route.fetchData) {
+            promises.push(route.fetchData(dispatch));
+        }
+        return match;
+    });
+
+    await Promise.all(promises);
+
     // 可以改成renderToNodeStream，使用流，提高性能
     const html = renderToString(
         <Provider store={store}>
             <StaticRouter
-                context={{}}
+                context={{ data: 'dd' }}
                 location={ctx.url}
             >
                 <App/>

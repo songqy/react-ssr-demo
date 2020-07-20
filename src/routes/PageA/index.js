@@ -1,1 +1,1 @@
-export { default } from './PageA.jsx';
+export { default, getInitData } from './PageA.jsx';
