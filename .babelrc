@@ -4,10 +4,10 @@
         "@babel/preset-react"
     ],
     "plugins": [
-        ["@babel/plugin-proposal-decorators",{"legacy": true }],
-        "@babel/plugin-transform-runtime",
-        "react-hot-loader/babel",
-        "add-module-exports",
-        "@babel/plugin-proposal-class-properties"
+        "@babel/plugin-transform-runtime"
+        // ["@babel/plugin-proposal-decorators",{"legacy": true }],
+        // "react-hot-loader/babel",
+        // "add-module-exports",
+        // "@babel/plugin-proposal-class-properties"
     ]
 }

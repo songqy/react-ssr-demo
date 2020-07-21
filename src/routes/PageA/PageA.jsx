@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import * as appActions from '@/redux/app/actions';
 import { bindActionCreators } from 'redux';
@@ -20,20 +21,19 @@ const getData = (_data) => {
 
 export const getInitData = async(dispatch) => {
     const data = await getData(mockData);
-    console.log('getInitData', data);
     dispatch(setData(data));
 };
 
 
 const PageA = (props) => {
     const { data, message, action, dispatch } = props;
-
-    console.log('data', data);
+    const [loading, setLoading] = useState(false);
 
     const toggleData = useCallback(async() => {
+        setLoading(true);
         const data = await getData([{ a: 5555 }]);
-        console.log('toggleData', data);
         action.setData(data);
+        setLoading(false);
     }, [action]);
 
 
@@ -43,9 +43,10 @@ const PageA = (props) => {
 
     return (
         <div className={styles.page}>
-            <div>PageA</div>
+            <div>PageA----</div>
             <div>data:{data[0] && data[0].a}</div>
             <div>message:{message}</div>
+            <div style={{ width: '100%', height: '30px' }}>{loading && <LoadingOutlined />}</div>
             <Button onClick={toggleData}>this is a button</Button>
             <Link to="/home">go to home</Link>
         </div>

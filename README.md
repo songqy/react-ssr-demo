@@ -21,3 +21,6 @@ You will also see any lint errors in the console.
 
 编译后端的代码，编译完成后 node ./serverbuild/server.js 运行
 
+### `npm run build:all`
+
+同时打包前后端代码

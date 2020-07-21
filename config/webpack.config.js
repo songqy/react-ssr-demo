@@ -22,8 +22,8 @@ const srcPath = path.resolve(rootPath, 'src');
 
 module.exports = {
     mode: 'development',
-    // devtool: 'cheap-module-eval-source-map',
-    devtool: 'cheap-module-source-map',
+    devtool: 'cheap-module-eval-source-map',
+    // devtool: 'cheap-module-source-map',
     entry: [path.resolve(rootPath, 'server/app.js')],
     output: {
         path: path.resolve(rootPath, 'serverbuild'),
@@ -119,18 +119,6 @@ module.exports = {
             loaders: [
                 {
                     loader: 'babel-loader',
-                    options: {
-                        // cacheDirectory: true,
-                        presets: ['@babel/preset-env', '@babel/preset-react'],
-                        plugins: [
-                            ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-                            '@babel/plugin-transform-runtime',
-                            'react-hot-loader/babel',
-                            'add-module-exports',
-                            '@babel/plugin-proposal-class-properties',
-                            '@babel/plugin-proposal-object-rest-spread',
-                        ],
-                    },
                 },
             ],
         }),

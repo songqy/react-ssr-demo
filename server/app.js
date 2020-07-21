@@ -6,12 +6,14 @@ import fs from 'fs';
 import util from 'util';
 import koaStatic from 'koa-static';
 import path from 'path';
-import { renderToString } from 'react-dom/server';
+import { renderToNodeStream } from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createServerStore } from '@/redux/store';
 import { setMessage } from '@/redux/app/actions';
 import { serverRoutes } from '@/router/routes';
+
+const readFile = util.promisify(fs.readFile);
 
 // 配置文件
 const config = {
@@ -26,12 +28,18 @@ app.use(
     koaStatic(path.join(__dirname, '../build'), {
         maxage: 365 * 24 * 60 * 1000,
         index: 'root',
-    // 这里配置不要写成'index'就可以了，因为在访问localhost:3030时，不能让服务默认去加载index.html文件，这里很容易掉进坑。
+        // 这里配置不要写成'index'就可以了，因为在访问localhost:3030时，不能让服务默认去加载index.html文件，这里很容易掉进坑。
     })
 );
 
+const pipe = (from, to, options) => {
+    return new Promise((resolve, reject) => {
+        from.pipe(to, options);
+        from.on('error', reject);
+        from.on('end', resolve);
+    });
+};
 
-const readFile = util.promisify(fs.readFile);
 
 const router = new Router();
 router.get('(.*)', async (ctx) => {
@@ -46,6 +54,9 @@ router.get('(.*)', async (ctx) => {
     const { dispatch } = store;
     dispatch(setMessage('message')); // test
 
+    // TODO 获取cookie，需要注入到接口请求
+    // const cookie = ctx.request.header.cookie
+
     // 初始化异步数据
     const promises = [];
     serverRoutes.some(route => {
@@ -58,22 +69,28 @@ router.get('(.*)', async (ctx) => {
 
     await Promise.all(promises);
 
-    // 可以改成renderToNodeStream，使用流，提高性能
-    const html = renderToString(
-        <Provider store={store}>
-            <StaticRouter
-                context={{ data: 'dd' }}
-                location={ctx.url}
-            >
-                <App/>
-            </StaticRouter>
-        </Provider>
-    );
-
     ctx.type = 'html'; //指定content type
 
-    // 替换掉 {{root}} 为我们生成后的HTML
-    ctx.body = shtml.replace('{{root}}', html).replace('{{preloadedState}}', JSON.stringify(store.getState()).replace(/</g, '\\u003c'));
+    const ReactApp = <Provider store={store}>
+        <StaticRouter
+            // context={{ }}
+            location={ctx.url}
+        >
+            <App/>
+        </StaticRouter>
+    </Provider>;
+
+    // 使用流，提高性能
+    const template = shtml.split('{{root}}');
+    const stream = renderToNodeStream(ReactApp);
+    ctx.status = 200; // koa的status默认是404，必须放在返回之前
+    ctx.res.write(template[0].replace('{{preloadedState}}', JSON.stringify(store.getState()).replace(/</g, '\\u003c')));
+    await pipe(stream, ctx.res, { end: false });
+    ctx.res.write(template[1]);
+    ctx.res.end();
+
+    // const html = renderToString(ReactApp);
+    // ctx.body = shtml.replace('{{root}}', html).replace('{{preloadedState}}', JSON.stringify(store.getState()).replace(/</g, '\\u003c'));
 });
 
 // 设置路由

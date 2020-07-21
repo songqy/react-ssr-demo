@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 // import logo from '@/images/logo.svg';
 import styles from './Home.module.less';
 import { bindActionCreators } from 'redux';
@@ -6,12 +6,28 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as appActions from '@/redux/app/actions';
 
+const { setMessage } = appActions;
+
+
+const getMessage = (_data) => {
+    return new Promise(resolve => setTimeout(() => resolve(_data), 1000));
+};
+
+export const getInitMessage = async(dispatch) => {
+    const message = await getMessage('init message');
+    dispatch(setMessage(message));
+};
+
 const Home = (props) => {
-    const { message, action: { setMessage } } = props;
+    const { message, dispatch, action: { setMessage } } = props;
 
     const handleClick = useCallback(() => {
         setMessage('click');
     }, [setMessage]);
+
+    useEffect(() => {
+        getInitMessage(dispatch);
+    }, [dispatch]);
 
 
     return (
@@ -48,6 +64,7 @@ const mapStateToProps = ({ app }) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         action: bindActionCreators(appActions, dispatch),
+        dispatch,
     };
 };
 
