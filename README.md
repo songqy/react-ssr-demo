@@ -1,21 +1,14 @@
 This project is a react ssr demo
 
-## Available Scripts
-
-In the project directory, you can run:
+## 可用命令
 
 ### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3010](http://localhost:3010) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+开发模式，不涉及后端渲染，浏览器访问地址[http://localhost:3010](http://localhost:3010)
 
 ### `npm run build`
 
 打包前端的代码
-
 
 ### `npm run build:server`
 
@@ -24,3 +17,12 @@ You will also see any lint errors in the console.
 ### `npm run build:all`
 
 同时打包前后端代码
+
+
+## 项目简介
+
+* 实现了react的ssr的同构应用
+* 采用了react-scripts和customize-cra做前端的构建工具
+* 实现了antd按需加载引入
+* 采用了renderToNodeStream渲染，提高了性能
+* 支持less和css modules，不过因为customize-cra的v1.0.0版本还不完善，生成的classname格式目前只能是`[local]--[hash:base64:5]`

@@ -13,7 +13,7 @@ module.exports = override(
         style: true,
     }),
 
-    useBabelRc(),
+    useBabelRc(), // eslint-disable-line
 
     // 添加 less 依赖
     addLessLoader({

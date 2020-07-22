@@ -22,6 +22,7 @@ const srcPath = path.resolve(rootPath, 'src');
 
 module.exports = {
     mode: 'development',
+    // mode: 'production',
     devtool: 'cheap-module-eval-source-map',
     // devtool: 'cheap-module-source-map',
     entry: [path.resolve(rootPath, 'server/app.js')],
@@ -98,10 +99,10 @@ module.exports = {
     //             common: {
     //                 test: /\.jsx?$/,
     //                 name: 'common',
-    //                 reuseExistingChunk: true
-    //             }
-    //         }
-    //     }
+    //                 reuseExistingChunk: true,
+    //             },
+    //         },
+    //     },
     // },
     resolve: {
         extensions: ['.js', '.jsx', '.css', '.scss', '.less'],
@@ -122,6 +123,6 @@ module.exports = {
                 },
             ],
         }),
-        //,new webpack.HotModuleReplacementPlugin()
+        // new webpack.HotModuleReplacementPlugin(),
     ],
 };
