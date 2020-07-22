@@ -1,5 +1,6 @@
-const { override, fixBabelImports, addLessLoader, addWebpackAlias, useBabelRc } = require('customize-cra');
+const { override, fixBabelImports, addLessLoader, addWebpackAlias, useBabelRc, addWebpackPlugin } = require('customize-cra');
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 function resolve(dir) {
     return path.join(__dirname, '.', dir);
@@ -12,6 +13,8 @@ module.exports = override(
         libraryDirectory: 'es',
         style: true,
     }),
+
+    process.env.BUNDLE_ANA ? addWebpackPlugin(new BundleAnalyzerPlugin()) : null,
 
     useBabelRc(), // eslint-disable-line
 

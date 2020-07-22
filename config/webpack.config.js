@@ -1,24 +1,55 @@
 
 const os = require('os');
 const path = require('path');
-// const webpack = require('webpack');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const HappyPack = require('happypack');
-// const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-// const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-// const autoprefixer = require('autoprefixer');
 
-// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-// const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const HappyPack = require('happypack');
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const nodeExternals = require('webpack-node-externals');
-// const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 
 const rootPath = path.resolve(__dirname, '../');
 const srcPath = path.resolve(rootPath, 'src');
+
+
+const plugins = [
+    new MiniCssExtractPlugin(),
+    new CleanWebpackPlugin(),
+    new HappyPack({
+        id: 'jsx',
+        threadPool: happyThreadPool,
+        loaders: [
+            {
+                loader: 'babel-loader',
+                options: {
+                    presets: [
+                        '@babel/preset-env',
+                        '@babel/preset-react',
+                    ],
+                    plugins: [
+                        '@babel/plugin-transform-runtime',
+                        ['import', {
+                            'libraryName': 'antd',
+                            'libraryDirectory': 'lib',
+                            // 'style': true,
+                        }],
+                        // ["@babel/plugin-proposal-decorators",{"legacy": true }],
+                        // "react-hot-loader/babel",
+                        // "add-module-exports",
+                        // "@babel/plugin-proposal-class-properties"
+                    ],
+                },
+            },
+        ],
+    }),
+];
+
+if (process.env.BUNDLE_ANA) {
+    plugins.push(new BundleAnalyzerPlugin());
+}
 
 module.exports = {
     mode: 'development',
@@ -112,17 +143,5 @@ module.exports = {
             'src': path.resolve(rootPath, 'src'), // less 需要这个
         },
     },
-    plugins: [
-        new MiniCssExtractPlugin(),
-        new HappyPack({
-            id: 'jsx',
-            threadPool: happyThreadPool,
-            loaders: [
-                {
-                    loader: 'babel-loader',
-                },
-            ],
-        }),
-        // new webpack.HotModuleReplacementPlugin(),
-    ],
+    plugins,
 };
